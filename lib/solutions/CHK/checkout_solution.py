@@ -24,7 +24,7 @@ def checkout(skus):
         'F': (3, 'F'),
         'N': (3, 'M'),
         'R': (3, 'Q'),
-        'U': (3, 'U')
+        'U': (4, 'U')
     }
 
     if not all(item in prices for item in skus):
@@ -69,6 +69,3 @@ def checkout(skus):
     #         count %= offer_count
     #
     # sum += count * prices[item]
-
-
-
