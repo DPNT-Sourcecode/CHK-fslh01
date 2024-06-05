@@ -61,7 +61,7 @@ def checkout(skus):
                 removed_items -= remove_count
 
     for item, count in group_items:
-        total += count * prices[item]
+        item_counts[item] = count
 
     # group_item_count = sum(item_counts[item] for item in group_discount_items)
     # total += (group_item_count // 3) * group_discount_price
@@ -83,4 +83,5 @@ def checkout(skus):
         total += count * prices[item]
 
     return total
+
 
