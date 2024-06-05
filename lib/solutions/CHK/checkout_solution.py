@@ -27,7 +27,7 @@ def checkout(skus):
 
         if item in special_offers:
             if isinstance(special_offers[item], list):
-                for offer_count, offer_price in sorted(special_offers[item,reversed]):
+                for offer_count, offer_price in sorted(special_offers[item], reverse=True):
                     sum += (count//offer_count)*offer_price
                     count %=offer_count
 
@@ -39,4 +39,5 @@ def checkout(skus):
         sum += count * prices[item]
 
     return sum
+
 
