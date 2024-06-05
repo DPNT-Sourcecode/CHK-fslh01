@@ -47,18 +47,16 @@ def checkout(skus):
                 item_counts[free_item] = max(0, item_counts[free_item] - free_items_count)
 
     group_item_count = sum(item_counts[item] for item in group_discount_items)
-    if group_item_count >= 3:
-        total += (group_item_count // 3)*group_discount_price
-        rem_group_items = group_item_count % 3
-        group_items_sorted = sorted(group_discount_items, key=lambda x: prices[x], reverse=True)
-        for item in group_items_sorted:
-            if rem_group_items <= 0:
-                break
-            if item_counts[item] > 0:
-                count_to_add = min(item_counts[item], rem_group_items)
-                total += count_to_add * prices[item]
-                rem_group_items -= count_to_add
-                item_counts[item] -= count_to_add
+    total += (group_item_count // 3) * group_discount_price
+    rem_group_items = group_item_count % 3
+
+    for item in sorted(group_discount_items, key=lambda x: prices[x], reverse=True):
+        if rem_group_items <= 0:
+            break
+        if item_counts[item] > 0:
+            count_to_deduct = min(item_counts[item], rem_group_items)
+            item_counts[item] -= count_to_deduct
+            rem_group_items -= count_to_deduct
 
     for item, count in item_counts.items():
         if item in special_offers:
@@ -69,6 +67,18 @@ def checkout(skus):
 
     return total
 
+# if group_item_count >= 3:
+#     total += (group_item_count // 3)*group_discount_price
+#     rem_group_items = group_item_count % 3
+#     group_items_sorted = sorted(group_discount_items, key=lambda x: prices[x], reverse=True)
+#     for item in group_items_sorted:
+#         if rem_group_items <= 0:
+#             break
+#         if item_counts[item] > 0:
+#             count_to_add = min(item_counts[item], rem_group_items)
+#             total += count_to_add * prices[item]
+#             rem_group_items -= count_to_add
+#             item_counts[item] -= count_to_add
 
 
 
