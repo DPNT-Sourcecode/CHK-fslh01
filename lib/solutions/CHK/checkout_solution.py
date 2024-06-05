@@ -1,13 +1,13 @@
 # noinspection PyUnusedLocal
 # skus = unicode string
 def checkout(skus):
-    prices = {'A': 50, 'B': 30, 'C': 20, 'D': 15, 'E': 40}
+    prices = {'A': 50, 'B': 30, 'C': 20, 'D': 15, 'E': 40, 'F': 10}
     special_offers = {
         'A': [(5, 200), (3, 130)],
         'B': [(2, 45)],
     }
 
-    free_offers = {'E': (2, 'B')}
+    free_offers = {'E': (2, 'B'), 'F': (3, 'F')}
 
     if not all(item in prices for item in skus):
         return -1
@@ -20,7 +20,10 @@ def checkout(skus):
     for item, (required_count, free_item) in free_offers.items():
         if item in item_counts:
             free_items_count = (item_counts[item] // required_count)
-            item_counts[free_item] = max(0, item_counts[free_item] - free_items_count)
+            if free_item == item:
+                item_counts[item] -= free_items_count
+            else:
+                item_counts[free_item] = max(0, item_counts[free_item] - free_items_count)
 
 
     for item, count in item_counts.items():
@@ -52,5 +55,6 @@ def checkout(skus):
         #         count %= offer_count
         #
         # sum += count * prices[item]
+
 
 
