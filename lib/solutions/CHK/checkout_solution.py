@@ -36,7 +36,7 @@ def checkout(skus):
     from collections import Counter
     item_counts = Counter(skus)
 
-    sum = 0
+    total = 0
 
     for item, (required_count, free_item) in free_offers.items():
         if item in item_counts:
@@ -48,25 +48,26 @@ def checkout(skus):
 
     group_discount_count = sum(item_counts[item] for item in group_discount_items)
     if group_discount_count >= 3:
-        sum += (group_discount_count // 3)*group_discount_price
+        total += (group_discount_count // 3)*group_discount_price
         rem_group_items = group_discount_count % 3
-        group_discount_sorted = sorted(group_discount_items, key=lambda x: prices[x], reverse=True)
-        for item in group_discount_items <= 0:
-            break
+        group_items_sorted = sorted(group_discount_items, key=lambda x: prices[x], reverse=True)
+        for item in group_items_sorted:
+            if rem_group_items <= 0:
+                break
+            if item_counts[item] > 0:
+                count_to_add = min(item_counts[item], rem_group_items)
+                total += count_to_add * prices[item]
+                rem_group_items -= count_to_add
+                item_counts[item] -= count_to_add
 
+    for item, count in item_counts.items():
+        if item in special_offers:
+            for offer_count, offer_price in sorted(special_offers[item], reverse=True):
+                total += (count // offer_count) * offer_price
+                count %= offer_count
+        total += count * prices[item]
 
+    return total
 
-
-
-
-
-    # for item, count in item_counts.items():
-    #     if item in special_offers:
-    #         for offer_count, offer_price in sorted(special_offers[item], reverse=True):
-    #             sum += (count // offer_count) * offer_price
-    #             count %= offer_count
-    #     sum += count * prices[item]
-    #
-    # return sum
 
 
