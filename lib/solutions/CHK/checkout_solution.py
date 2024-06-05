@@ -2,7 +2,6 @@
 
 # noinspection PyUnusedLocal
 # skus = unicode string
-# E    | 40    | 2E get one B free
 def checkout(skus):
 
     prices = {'A': 50, 'B':30, 'C':20, 'D': 15, 'E': 40}
@@ -40,3 +39,4 @@ def checkout(skus):
         sum += count * prices[item]
 
     return sum
+
