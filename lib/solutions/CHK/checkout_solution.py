@@ -46,17 +46,34 @@ def checkout(skus):
             else:
                 item_counts[free_item] = max(0, item_counts[free_item] - free_items_count)
 
-    group_item_count = sum(item_counts[item] for item in group_discount_items)
-    total += (group_item_count // 3) * group_discount_price
-    rem_group_items = group_item_count % 3
+    group_items = [(item, item_counts[item]) for item in group_discount_items if item in item_counts]
+    group_items.sort(key=lambda x: prices[x[0]], reverse=True)
 
-    for item in sorted(group_discount_items, key=lambda x: prices[x], reverse=True):
-        if rem_group_items <= 0:
-            break
-        if item_counts[item] > 0:
-            count_to_deduct = min(item_counts[item], rem_group_items)
-            item_counts[item] -= count_to_deduct
-            rem_group_items -= count_to_deduct
+    while sum(count for item, count in group_items) >= 3:
+        total += group_discount_price
+        removed_items = 3
+        for i, (item, count) in enumerate(group_items):
+            if removed_items <= 0:
+                break
+            if count > 0:
+                remove_count = min(count, removed_items)
+                group_items[i] = (item, count - remove_count)
+                removed_items -= remove_count
+
+    for item, count in group_items:
+        total += count * prices[item]
+
+    # group_item_count = sum(item_counts[item] for item in group_discount_items)
+    # total += (group_item_count // 3) * group_discount_price
+    # rem_group_items = group_item_count % 3
+    #
+    # for item in sorted(group_discount_items, key=lambda x: prices[x], reverse=True):
+    #     if rem_group_items <= 0:
+    #         break
+    #     if item_counts[item] > 0:
+    #         count_to_deduct = min(item_counts[item], rem_group_items)
+    #         item_counts[item] -= count_to_deduct
+    #         rem_group_items -= count_to_deduct
 
     for item, count in item_counts.items():
         if item in special_offers:
@@ -67,15 +84,3 @@ def checkout(skus):
 
     return total
 
-# if group_item_count >= 3:
-#     total += (group_item_count // 3)*group_discount_price
-#     rem_group_items = group_item_count % 3
-#     group_items_sorted = sorted(group_discount_items, key=lambda x: prices[x], reverse=True)
-#     for item in group_items_sorted:
-#         if rem_group_items <= 0:
-#             break
-#         if item_counts[item] > 0:
-#             count_to_add = min(item_counts[item], rem_group_items)
-#             total += count_to_add * prices[item]
-#             rem_group_items -= count_to_add
-#             item_counts[item] -= count_to_add
