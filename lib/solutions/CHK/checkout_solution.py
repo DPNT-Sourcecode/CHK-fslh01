@@ -79,6 +79,3 @@ def checkout(skus):
 #             total += count_to_add * prices[item]
 #             rem_group_items -= count_to_add
 #             item_counts[item] -= count_to_add
-
-
-
